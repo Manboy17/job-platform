@@ -1,15 +1,15 @@
 export const headerLinks = [
   {
     label: "Home",
-    link: "/",
+    route: "/",
   },
   {
     label: "List Job",
-    link: "/list-job",
+    route: "/list-job",
   },
   {
     label: "View Profile",
-    link: "/profile",
+    route: "/profile",
   },
 ];
 
