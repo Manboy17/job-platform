@@ -7,6 +7,6 @@ export type CreateUserParams = {
 };
 
 export type UpdateUserParams = {
-  firstname: string;
+  firstName: string;
   lastName: string;
 };
