@@ -83,4 +83,12 @@
   .select-field {
     @apply min-h-[44px] border-grey-50 border-2 outline-none focus-visible:ring-transparent focus:ring-transparent flex-grow;
   }
+
+  .input-field {
+    @apply focus-visible:ring-offset-0 w-full focus-visible:ring-transparent !important;
+  }
+
+  .textarea {
+    @apply w-full  focus-visible:ring-transparent !important;
+  }
 }

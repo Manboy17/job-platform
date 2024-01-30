@@ -14,14 +14,12 @@ export const headerLinks = [
 ];
 
 export const jobDefaultValues = {
-  title: "",
-  shortDescription: "",
+  position: "",
+  shortDesc: "",
   description: "",
-  isVerified: false,
-  location: "",
-  jobType: "",
+  city: "",
+  type: "",
   industry: "",
-  experience: "",
-  rating: 0,
-  companyUrl: "",
+  company: "",
+  experience: 0,
 };
