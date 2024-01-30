@@ -29,3 +29,21 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
     console.log(error);
   }
 }
+
+export async function getUserById(params: { userId: string }) {
+  try {
+    await connectToDatabase();
+
+    const { userId } = params;
+
+    const user = await User.findOne({ clerkId: userId });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
