@@ -11,7 +11,7 @@ import {
 
 const Filters = () => {
   return (
-    <div className="flex items-center gap-6 w-full">
+    <div className="flex flex-wrap items-center gap-6 w-full md:flex-nowrap">
       <Select>
         <SelectTrigger className="select-field w-[180px]">
           <SelectValue placeholder="Location: Deventer" />
