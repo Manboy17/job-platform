@@ -77,10 +77,10 @@
 
 @layer utilities {
   .wrapper {
-    @apply max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full;
+    @apply max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-5 w-full;
   }
 
   .select-field {
-    @apply min-h-[44px] border-grey-50 border-2 outline-none focus-visible:ring-transparent focus:ring-transparent;
+    @apply min-h-[44px] border-grey-50 border-2 outline-none focus-visible:ring-transparent focus:ring-transparent flex-grow;
   }
 }
