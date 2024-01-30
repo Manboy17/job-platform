@@ -76,22 +76,20 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ message: "ok", user: newUser });
+    return NextResponse.json({ message: "OK", user: newUser });
   }
 
   if (eventType === "user.updated") {
-    const { id, email_addresses, image_url, first_name, last_name } = evt.data;
+    const { id, image_url, first_name, last_name } = evt.data;
 
     const user = {
-      firstname: first_name,
+      firstName: first_name,
       lastName: last_name,
       picture: image_url,
     };
 
     const updatedUser = await updateUser(id, user);
 
-    return NextResponse.json({ message: "ok", user: updatedUser });
+    return NextResponse.json({ message: "OK", user: updatedUser });
   }
-
-  return new Response("", { status: 200 });
 }

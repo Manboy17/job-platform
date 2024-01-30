@@ -8,9 +8,9 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return (
-    <div className="flex flex-col justify-between h-screen">
+    <div className="flex flex-col h-screen">
       <Header />
-      {children}
+      <main className="flex-1">{children}</main>
       <Footer />
     </div>
   );
