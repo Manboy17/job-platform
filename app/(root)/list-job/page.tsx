@@ -11,6 +11,8 @@ const ListJob = async () => {
 
   const mongoUser = await getUserById({ userId });
 
+  console.log(mongoUser);
+
   return (
     <section className="wrapper">
       <h1 className="text-left pt-10 text-xl font-normal">Create Vacancy</h1>

@@ -5,8 +5,15 @@ import React from "react";
 import NavLinks from "./NavLinks";
 import { Button } from "../ui/button";
 import Mobile from "./Mobile";
+import { getUserById } from "@/lib/actions/user.action";
+import { redirect } from "next/navigation";
 
-const Header = () => {
+const Header = async () => {
+  const { userId } = auth();
+
+  if (!userId) redirect("/sign-in");
+  const user = await getUserById({ userId });
+
   return (
     <div className="wrapper flex items-center justify-between">
       <Link href="/" className="flex items-center gap-3">
@@ -27,7 +34,9 @@ const Header = () => {
             <Mobile />
             <div className="hidden flex-col md:flex">
               <span className="text-xs">Enterprise</span>
-              <span className="text-sm font-medium">Denys Hlushchenko</span>
+              <span className="text-sm font-medium">
+                {user.firstName} {user.lastName}
+              </span>
             </div>
           </div>
         </SignedIn>
