@@ -18,7 +18,7 @@ export async function createUser(user: CreateUserParams) {
 
     const newUser = await User.create(user);
 
-    return JSON.parse(JSON.stringify(newUser));
+    return newUser;
   } catch (error) {
     console.log(error);
   }
@@ -34,7 +34,7 @@ export async function updateUser(params: UpdateUserParams) {
       new: true,
     });
 
-    return JSON.parse(JSON.stringify(updatedUser));
+    return updatedUser;
   } catch (error) {
     console.log(error);
   }
