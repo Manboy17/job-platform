@@ -1,8 +1,14 @@
 "use server";
 
-import { CreateUserParams, UpdateUserParams } from "@/types";
+import {
+  CreateUserParams,
+  GetUserById,
+  GetUserJobsParams,
+  UpdateUserParams,
+} from "@/types";
 import { connectToDatabase } from "../database";
 import User from "../database/models/user.model";
+import Job from "../database/models/job.model";
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -16,9 +22,11 @@ export async function createUser(user: CreateUserParams) {
   }
 }
 
-export async function updateUser(clerkId: string, user: UpdateUserParams) {
+export async function updateUser(params: UpdateUserParams) {
   try {
     await connectToDatabase();
+
+    const { clerkId, user } = params;
 
     const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
       new: true,
@@ -30,7 +38,27 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
   }
 }
 
-export async function getUserById(params: { userId: string }) {
+export async function deleteUser({ clerkId }: { clerkId: string }) {
+  try {
+    await connectToDatabase();
+
+    const user = await User.findOneAndDelete({ clerkId });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await Job.deleteMany({ creator: user._id });
+
+    const deletedUser = await User.findByIdAndDelete(user._id);
+
+    return deletedUser;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getUserById(params: GetUserById) {
   try {
     await connectToDatabase();
 
@@ -43,6 +71,24 @@ export async function getUserById(params: { userId: string }) {
     }
 
     return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getUserJobs(params: GetUserJobsParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId } = params;
+
+    const jobs = await Job.find({ creator: userId });
+
+    if (!jobs) {
+      throw new Error("Jobs not found");
+    }
+
+    return jobs;
   } catch (error) {
     console.log(error);
   }

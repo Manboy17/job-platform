@@ -6,19 +6,17 @@ import NavLinks from "./NavLinks";
 import { Button } from "../ui/button";
 import Mobile from "./Mobile";
 import { getUserById } from "@/lib/actions/user.action";
-import { redirect } from "next/navigation";
 
 const Header = async () => {
   const { userId } = auth();
 
-  if (!userId) redirect("/sign-in");
   const user = await getUserById({ userId });
 
   return (
     <div className="wrapper flex items-center justify-between">
       <Link href="/" className="flex items-center gap-3">
         <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
-        <span className="text-lg font-medium">Getjob.nl</span>
+        <span className="text-lg font-medium">Getjob.wide</span>
       </Link>
 
       <SignedIn>
@@ -35,7 +33,11 @@ const Header = async () => {
             <div className="hidden flex-col md:flex">
               <span className="text-xs">Enterprise</span>
               <span className="text-sm font-medium">
-                {user.firstName} {user.lastName}
+                {user && (
+                  <span>
+                    {user.firstName} {user.lastName}
+                  </span>
+                )}
               </span>
             </div>
           </div>

@@ -15,7 +15,7 @@ const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   picture: { type: String, required: true },
-  saved: { type: Schema.Types.ObjectId, ref: "Job" },
+  saved: [{ type: Schema.Types.ObjectId, ref: "Job" }],
 });
 
 const User = models.User || model("User", UserSchema);
