@@ -3,7 +3,6 @@ import NotYet from "@/components/shared/NotYet";
 import { getUserById, getUserJobs } from "@/lib/actions/user.action";
 import { IJob } from "@/lib/database/models/job.model";
 import { auth } from "@clerk/nextjs";
-import console from "console";
 import React from "react";
 
 const ProfilePage = async () => {

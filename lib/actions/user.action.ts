@@ -4,11 +4,13 @@ import {
   CreateUserParams,
   GetUserById,
   GetUserJobsParams,
+  ToggleSaveJobsParams,
   UpdateUserParams,
 } from "@/types";
 import { connectToDatabase } from "../database";
 import User from "../database/models/user.model";
 import Job from "../database/models/job.model";
+import { revalidatePath } from "next/cache";
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -89,6 +91,40 @@ export async function getUserJobs(params: GetUserJobsParams) {
     }
 
     return jobs;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function toggleSaveJobs(params: ToggleSaveJobsParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, jobId, path } = params;
+
+    const user = await User.findOne({ clerkId: userId });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isJobSaved = user.saved.includes(jobId);
+
+    if (isJobSaved) {
+      await User.findOneAndUpdate(
+        { clerkId: userId },
+        { $pull: { saved: jobId } },
+        { new: true }
+      );
+    } else {
+      await User.findOneAndUpdate(
+        { clerkId: userId },
+        { $push: { saved: jobId } },
+        { new: true }
+      );
+    }
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
   }
