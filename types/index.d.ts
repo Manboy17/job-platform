@@ -7,8 +7,13 @@ export type CreateUserParams = {
 };
 
 export type UpdateUserParams = {
-  firstName: string;
-  lastName: string;
+  clerkId: string;
+  user: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    picture: string;
+  };
 };
 
 export type CreateJobParams = {
@@ -24,4 +29,12 @@ export type CreateJobParams = {
     company: string;
   };
   path: string;
+};
+
+export type GetUserById = {
+  userId: string | null;
+};
+
+export type GetUserJobsParams = {
+  userId: string | null;
 };

@@ -36,7 +36,7 @@ const MainPage = async () => {
             </span>
             <div className="flex flex-col gap-5 mt-3">
               {jobs.map((job: IJob) => (
-                <JobCard key={job._id} job={job} />
+                <JobCard key={job._id} job={job} isMainPage />
               ))}
             </div>
           </div>

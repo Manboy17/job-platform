@@ -6,11 +6,16 @@ import { CiSaveDown2 } from "react-icons/ci";
 
 interface JobCardProps {
   job: IJob;
+  isMainPage: boolean;
 }
 
-const JobCard = ({ job }: JobCardProps) => {
+const JobCard = ({ job, isMainPage }: JobCardProps) => {
   return (
-    <div className="py-5 px-7 bg-white rounded-xl">
+    <div
+      className={`py-5 px-7 ${
+        isMainPage ? "bg-white" : "bg-gray-100"
+      } rounded-xl`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
           <h2 className="text-lg font-medium cursor-pointer">{job.position}</h2>
