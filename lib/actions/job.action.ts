@@ -1,9 +1,10 @@
 "use server";
 
-import { CreateJobParams } from "@/types";
+import { CreateJobParams, GetSavedJobsParams } from "@/types";
 import { connectToDatabase } from "../database";
 import Job from "../database/models/job.model";
 import { revalidatePath } from "next/cache";
+import User from "../database/models/user.model";
 
 const populateJob = (query: any) => {
   return query.populate({
@@ -36,6 +37,29 @@ export async function getJobs() {
     }
 
     return JSON.parse(JSON.stringify(jobs));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getSavedJobs(params: GetSavedJobsParams) {
+  try {
+    await connectToDatabase();
+
+    const { clerkId } = params;
+
+    const user = await User.findOne({ clerkId }).populate({
+      path: "saved",
+      options: { sort: { createdAt: -1 } },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const savedJobs = user.saved;
+
+    return JSON.parse(JSON.stringify(savedJobs));
   } catch (error) {
     console.log(error);
   }

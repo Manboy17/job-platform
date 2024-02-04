@@ -1,6 +1,6 @@
 "use client";
 
-import { toggleSaveJobs } from "@/lib/actions/user.action";
+import { toggleSavedJobs } from "@/lib/actions/user.action";
 import { IJob } from "@/lib/database/models/job.model";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -17,12 +17,13 @@ const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
   const pathname = usePathname();
 
   const handleSave = async () => {
-    await toggleSaveJobs({
-      userId: userId!,
+    await toggleSavedJobs({
+      userId: JSON.parse(userId!),
       jobId: job._id,
       path: pathname,
     });
   };
+
   return (
     <div
       className={`py-5 px-7 ${
@@ -35,9 +36,9 @@ const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
           <span className="text-xs text-gray-500">{job.shortDesc}</span>
         </div>
         <button
-          className={`ml-8 p-2 rounded-full ${
+          className={`ml-8 p-2 ${
             isSaved ? "bg-blue-100" : "bg-gray-100"
-          }`}
+          } rounded-full`}
           onClick={handleSave}
         >
           <CiSaveDown2 size={23} />

@@ -5,7 +5,6 @@ import Search from "@/components/shared/Search";
 import { getJobs } from "@/lib/actions/job.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { IJob } from "@/lib/database/models/job.model";
-import { IUser } from "@/lib/database/models/user.model";
 import { auth } from "@clerk/nextjs";
 import React from "react";
 
@@ -14,7 +13,7 @@ const MainPage = async () => {
   const { userId } = auth();
 
   const mongoUser = await getUserById({ userId });
-  console.log(mongoUser);
+
   return (
     <>
       <section className="bg-blue-600 w-full py-4">
@@ -48,7 +47,7 @@ const MainPage = async () => {
                   job={job}
                   isMainPage
                   userId={JSON.stringify(mongoUser?._id)}
-                  // isSaved={mongoUser?.saved.includes(job._id)}
+                  isSaved={mongoUser?.saved.includes(job._id)}
                 />
               ))}
             </div>

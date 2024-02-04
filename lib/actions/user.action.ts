@@ -2,7 +2,7 @@
 
 import {
   CreateUserParams,
-  GetUserById,
+  GetUserByIdParams,
   GetUserJobsParams,
   ToggleSaveJobsParams,
   UpdateUserParams,
@@ -60,7 +60,7 @@ export async function deleteUser({ clerkId }: { clerkId: string }) {
   }
 }
 
-export async function getUserById(params: GetUserById) {
+export async function getUserById(params: GetUserByIdParams) {
   try {
     await connectToDatabase();
 
@@ -96,13 +96,13 @@ export async function getUserJobs(params: GetUserJobsParams) {
   }
 }
 
-export async function toggleSaveJobs(params: ToggleSaveJobsParams) {
+export async function toggleSavedJobs(params: ToggleSaveJobsParams) {
   try {
     await connectToDatabase();
 
     const { userId, jobId, path } = params;
 
-    const user = await User.findOne({ clerkId: userId });
+    const user = await User.findById(userId);
 
     if (!user) {
       throw new Error("User not found");
@@ -111,16 +111,24 @@ export async function toggleSaveJobs(params: ToggleSaveJobsParams) {
     const isJobSaved = user.saved.includes(jobId);
 
     if (isJobSaved) {
-      await User.findOneAndUpdate(
-        { clerkId: userId },
-        { $pull: { saved: jobId } },
-        { new: true }
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: { saved: jobId },
+        },
+        {
+          new: true,
+        }
       );
     } else {
-      await User.findOneAndUpdate(
-        { clerkId: userId },
-        { $push: { saved: jobId } },
-        { new: true }
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $push: { saved: jobId },
+        },
+        {
+          new: true,
+        }
       );
     }
 

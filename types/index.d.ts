@@ -31,7 +31,7 @@ export type CreateJobParams = {
   path: string;
 };
 
-export type GetUserById = {
+export type GetUserByIdParams = {
   userId: string | null;
 };
 
@@ -43,4 +43,8 @@ export type ToggleSaveJobsParams = {
   userId: string;
   jobId: string;
   path: string;
+};
+
+export type GetSavedJobsParams = {
+  clerkId: string;
 };
