@@ -3,11 +3,17 @@ import JobCard from "@/components/shared/JobCard";
 import ProductDetails from "@/components/shared/ProductDetails";
 import Search from "@/components/shared/Search";
 import { getJobs } from "@/lib/actions/job.action";
+import { getUserById } from "@/lib/actions/user.action";
 import { IJob } from "@/lib/database/models/job.model";
+import { auth } from "@clerk/nextjs";
 import React from "react";
 
 const MainPage = async () => {
   const jobs: IJob[] = await getJobs();
+  const { userId } = auth();
+
+  const mongoUser = await getUserById({ userId });
+
   return (
     <>
       <section className="bg-blue-600 w-full py-4">
@@ -36,7 +42,13 @@ const MainPage = async () => {
             </span>
             <div className="flex flex-col gap-5 mt-3">
               {jobs.map((job: IJob) => (
-                <JobCard key={job._id} job={job} isMainPage />
+                <JobCard
+                  key={job._id}
+                  job={job}
+                  isMainPage
+                  userId={JSON.stringify(mongoUser?._id)}
+                  isSaved={mongoUser?.saved.includes(job._id)}
+                />
               ))}
             </div>
           </div>

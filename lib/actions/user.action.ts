@@ -2,13 +2,15 @@
 
 import {
   CreateUserParams,
-  GetUserById,
+  GetUserByIdParams,
   GetUserJobsParams,
+  ToggleSaveJobsParams,
   UpdateUserParams,
 } from "@/types";
 import { connectToDatabase } from "../database";
 import User from "../database/models/user.model";
 import Job from "../database/models/job.model";
+import { revalidatePath } from "next/cache";
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -16,7 +18,7 @@ export async function createUser(user: CreateUserParams) {
 
     const newUser = await User.create(user);
 
-    return JSON.parse(JSON.stringify(newUser));
+    return newUser;
   } catch (error) {
     console.log(error);
   }
@@ -32,7 +34,7 @@ export async function updateUser(params: UpdateUserParams) {
       new: true,
     });
 
-    return JSON.parse(JSON.stringify(updatedUser));
+    return updatedUser;
   } catch (error) {
     console.log(error);
   }
@@ -58,7 +60,7 @@ export async function deleteUser({ clerkId }: { clerkId: string }) {
   }
 }
 
-export async function getUserById(params: GetUserById) {
+export async function getUserById(params: GetUserByIdParams) {
   try {
     await connectToDatabase();
 
@@ -89,6 +91,48 @@ export async function getUserJobs(params: GetUserJobsParams) {
     }
 
     return jobs;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function toggleSavedJobs(params: ToggleSaveJobsParams) {
+  try {
+    await connectToDatabase();
+
+    const { userId, jobId, path } = params;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isJobSaved = user.saved.includes(jobId);
+
+    if (isJobSaved) {
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: { saved: jobId },
+        },
+        {
+          new: true,
+        }
+      );
+    } else {
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $push: { saved: jobId },
+        },
+        {
+          new: true,
+        }
+      );
+    }
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
   }

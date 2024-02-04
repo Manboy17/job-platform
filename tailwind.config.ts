@@ -77,7 +77,9 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 
 export default config;
+
+// require("tailwind-scrollbar-hide")
