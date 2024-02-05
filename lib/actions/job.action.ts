@@ -1,6 +1,6 @@
 "use server";
 
-import { CreateJobParams, GetSavedJobsParams } from "@/types";
+import { CreateJobParams, GetJobByIdParams, GetSavedJobsParams } from "@/types";
 import { connectToDatabase } from "../database";
 import Job from "../database/models/job.model";
 import { revalidatePath } from "next/cache";
@@ -60,6 +60,23 @@ export async function getSavedJobs(params: GetSavedJobsParams) {
     const savedJobs = user.saved;
 
     return JSON.parse(JSON.stringify(savedJobs));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getJobById(params: GetJobByIdParams) {
+  try {
+    await connectToDatabase();
+    const { jobId } = params;
+
+    const job = await populateJob(Job.findById(jobId));
+
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    return JSON.parse(JSON.stringify(job));
   } catch (error) {
     console.log(error);
   }

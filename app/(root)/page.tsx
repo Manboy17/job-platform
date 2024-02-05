@@ -35,25 +35,20 @@ const MainPage = async () => {
       </section>
 
       <section className="bg-gray-100">
-        <div className="wrapper py-5 flex">
-          <div className="w-1/3">
-            <span className="text-xs text-gray-500">
-              {jobs.length} Job Posting Available
-            </span>
-            <div className="flex flex-col gap-5 mt-3">
-              {jobs.map((job: IJob) => (
-                <JobCard
-                  key={job._id}
-                  job={job}
-                  isMainPage
-                  userId={JSON.stringify(mongoUser?._id)}
-                  isSaved={mongoUser?.saved.includes(job._id)}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="w-2/3">
-            <ProductDetails />
+        <div className="wrapper py-5">
+          <span className="text-xs text-gray-500">
+            {jobs.length} Job Posting Available
+          </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-3">
+            {jobs.map((job: IJob) => (
+              <JobCard
+                key={job._id}
+                job={job}
+                isMainPage
+                userId={JSON.stringify(mongoUser?._id)}
+                isSaved={mongoUser?.saved.includes(job._id)}
+              />
+            ))}
           </div>
         </div>
       </section>
