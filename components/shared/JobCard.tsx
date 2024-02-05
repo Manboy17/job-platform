@@ -1,10 +1,9 @@
 "use client";
 
-import { toggleSavedJobs } from "@/lib/actions/user.action";
 import { IJob } from "@/lib/database/models/job.model";
-import { usePathname } from "next/navigation";
+import Link from "next/link";
 import React from "react";
-import { CiSaveDown2 } from "react-icons/ci";
+import Save from "./Save";
 
 interface JobCardProps {
   job: IJob;
@@ -14,16 +13,6 @@ interface JobCardProps {
 }
 
 const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
-  const pathname = usePathname();
-
-  const handleSave = async () => {
-    await toggleSavedJobs({
-      userId: JSON.parse(userId!),
-      jobId: job._id,
-      path: pathname,
-    });
-  };
-
   return (
     <div
       className={`py-5 px-7 ${
@@ -32,17 +21,12 @@ const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
     >
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <h2 className="text-lg font-medium cursor-pointer">{job.position}</h2>
+          <Link href={`/job/${job._id}`}>
+            <h2 className="text-lg font-medium">{job.position}</h2>
+          </Link>
           <span className="text-xs text-gray-500">{job.shortDesc}</span>
         </div>
-        <button
-          className={`ml-8 p-2 ${
-            isSaved ? "bg-blue-100" : "bg-gray-100"
-          } rounded-full`}
-          onClick={handleSave}
-        >
-          <CiSaveDown2 size={23} />
-        </button>
+        <Save isSaved={isSaved} userId={userId!} jobId={job._id} />
       </div>
 
       <div className="border-b-[3px] border-dotted my-3" />

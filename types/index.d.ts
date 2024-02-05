@@ -48,3 +48,7 @@ export type ToggleSaveJobsParams = {
 export type GetSavedJobsParams = {
   clerkId: string;
 };
+
+export type GetJobByIdParams = {
+  jobId: string;
+};
