@@ -19,7 +19,7 @@ const JobDetails = async ({ params: { id } }: { params: { id: string } }) => {
             <h1 className="text-xl font-semibold lg:text-3xl flex items-center gap-3">
               {job.position} <FaStar size={15} className="text-blue-500" />
             </h1>
-            <span className="text-xs tracking-wide md:text-sm text-gray-400">
+            <span className="text-xs tracking-wide md:text-sm text-gray-500">
               {job.shortDesc}
             </span>
           </div>
@@ -59,7 +59,7 @@ const JobDetails = async ({ params: { id } }: { params: { id: string } }) => {
           <h1 className="text-md md:text-lg font-medium flex items-center gap-3">
             Job Overview <FaStar size={15} className="text-blue-500" />{" "}
           </h1>
-          <p className="text-gray-400 pt-3 text-xs sm:text-sm">
+          <p className="text-gray-500 pt-3 text-xs sm:text-sm">
             {job.description.split("\n").map((paragraph, index) => (
               <React.Fragment key={index}>
                 {index > 0 && <br />} {paragraph}
