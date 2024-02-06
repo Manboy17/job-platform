@@ -1,4 +1,5 @@
 import Save from "@/components/shared/Save";
+import ParsedHTML from "@/components/shared/ParsedHTML";
 import { getJobById } from "@/lib/actions/job.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { IJob } from "@/lib/database/models/job.model";
@@ -57,15 +58,10 @@ const JobDetails = async ({ params: { id } }: { params: { id: string } }) => {
 
         <div>
           <h1 className="text-md md:text-lg font-medium flex items-center gap-3">
-            Job Overview <FaStar size={15} className="text-blue-500" />{" "}
+            Job Overview <FaStar size={15} className="text-blue-500" />
           </h1>
-          <p className="text-gray-500 pt-3 text-xs sm:text-sm">
-            {job.description.split("\n").map((paragraph, index) => (
-              <React.Fragment key={index}>
-                {index > 0 && <br />} {paragraph}
-              </React.Fragment>
-            ))}
-          </p>
+
+          <ParsedHTML data={job.description} />
         </div>
 
         <div className="border-t-[1px] my-5" />
