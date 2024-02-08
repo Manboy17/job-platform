@@ -1,10 +1,16 @@
 "use server";
 
-import { CreateJobParams, GetJobByIdParams, GetSavedJobsParams } from "@/types";
+import {
+  CreateJobParams,
+  GetJobByIdParams,
+  GetJobsParams,
+  GetSavedJobsParams,
+} from "@/types";
 import { connectToDatabase } from "../database";
 import Job from "../database/models/job.model";
 import { revalidatePath } from "next/cache";
 import User from "../database/models/user.model";
+import { FilterQuery } from "mongoose";
 
 const populateJob = (query: any) => {
   return query.populate({
@@ -26,11 +32,38 @@ export async function createJob({ userId, job, path }: CreateJobParams) {
   }
 }
 
-export async function getJobs() {
+export async function getJobs(params: GetJobsParams) {
   try {
     await connectToDatabase();
 
-    const jobs = await populateJob(Job.find({}));
+    const { search, filter } = params;
+
+    const query: FilterQuery<typeof Job> = {};
+
+    if (search) {
+      query.$or = [
+        {
+          position: { $regex: new RegExp(search, "i") },
+        },
+        {
+          shortDesc: { $regex: new RegExp(search, "i") },
+        },
+        {
+          description: { $regex: new RegExp(search, "i") },
+        },
+        {
+          type: { $regex: new RegExp(search, "i") },
+        },
+        {
+          industry: { $regex: new RegExp(search, "i") },
+        },
+        {
+          city: { $regex: new RegExp(search, "i") },
+        },
+      ];
+    }
+
+    const jobs = await populateJob(Job.find(query));
 
     if (!jobs) {
       throw new Error("No jobs found");

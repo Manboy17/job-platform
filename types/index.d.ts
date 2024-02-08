@@ -6,6 +6,11 @@ export type CreateUserParams = {
   picture: string;
 };
 
+export type GetJobsParams = {
+  search: string;
+  filter: string;
+};
+
 export type UpdateUserParams = {
   clerkId: string;
   user: {
@@ -52,3 +57,7 @@ export type GetSavedJobsParams = {
 export type GetJobByIdParams = {
   jobId: string;
 };
+
+export interface SearchParamsProps {
+  searchParams: { [key: string]: string | undefined };
+}
