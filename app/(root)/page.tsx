@@ -1,15 +1,17 @@
 import Filters from "@/components/shared/Filters";
 import JobCard from "@/components/shared/JobCard";
-import ProductDetails from "@/components/shared/ProductDetails";
 import Search from "@/components/shared/Search";
 import { getJobs } from "@/lib/actions/job.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { IJob } from "@/lib/database/models/job.model";
+import { SearchParamsProps } from "@/types";
 import { auth } from "@clerk/nextjs";
 import React from "react";
 
-const MainPage = async () => {
-  const jobs: IJob[] = await getJobs();
+const MainPage = async ({ searchParams }: SearchParamsProps) => {
+  const search = (searchParams?.search as string) || "";
+  const filter = (searchParams?.filter as string) || "";
+  const jobs: IJob[] = await getJobs({ search, filter });
   const { userId } = auth();
 
   const mongoUser = await getUserById({ userId });

@@ -24,7 +24,9 @@ const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
           <Link href={`/job/${job._id}`}>
             <h2 className="text-lg font-medium">{job.position}</h2>
           </Link>
-          <span className="text-xs text-gray-500">{job.shortDesc}</span>
+          <span className="text-xs text-gray-500 line-clamp-1">
+            {job.shortDesc}
+          </span>
         </div>
         <Save isSaved={isSaved} userId={userId!} jobId={job._id} />
       </div>

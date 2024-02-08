@@ -11,13 +11,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { createJob } from "@/lib/actions/job.action";
 import { usePathname, useRouter } from "next/navigation";
 import { jobDefaultValues } from "@/constants";
+import TipTap from "./TipTap";
 
 interface JobFormProps {
   type: "Create" | "Edit";
@@ -75,6 +76,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
                     placeholder="Enter position..."
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -92,6 +94,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
                     placeholder="Short description..."
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -109,6 +112,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
                     placeholder="City..."
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -126,6 +130,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
                     placeholder="Type..."
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -143,6 +148,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
                     placeholder="Industry..."
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -161,6 +167,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
                     placeholder="Experience..."
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -178,6 +185,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
                     placeholder="Company..."
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -190,13 +198,9 @@ const JobForm = ({ type, userId }: JobFormProps) => {
             <FormItem className="w-full">
               <FormLabel>Enter the description</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Description..."
-                  className="textarea"
-                  rows={10}
-                  {...field}
-                />
+                <TipTap onChange={field.onChange} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
