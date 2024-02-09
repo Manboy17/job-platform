@@ -8,50 +8,76 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getJobs } from "@/lib/actions/job.action";
-import { IJob } from "@/lib/database/models/job.model";
+import { getFilters } from "@/lib/actions/job.action";
+import { formUrlQuery } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
+import qs from "query-string";
+
+interface FiltersState {
+  cities?: string[];
+  types?: string[];
+  industry?: string[];
+  experience?: number[];
+}
 
 const Filters = () => {
-  // const [jobs, setJobs] = useState<IJob[]>([]);
-  // useEffect(() => {
-  //   const getAllJobs = async () => {
-  //     const jobList = await getJobs();
-  //     setJobs(jobList);
-  //   };
+  const [filters, setFilters] = useState<FiltersState>();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  //   getAllJobs();
-  // }, []);
+  useEffect(() => {
+    const getAllFilters = async () => {
+      const filters = await getFilters();
+      setFilters(filters as FiltersState);
+    };
 
-  // const uniqueCities = Array.from(new Set(jobs.map((job: IJob) => job.city)));
-  // const uniqueTypes = Array.from(new Set(jobs.map((job: IJob) => job.type)));
-  // const uniqueIndustry = Array.from(
-  //   new Set(jobs.map((job: IJob) => job.industry))
-  // );
-  // const uniqueExperience = Array.from(
-  //   new Set(jobs.map((job: IJob) => job.experience))
-  // );
+    getAllFilters();
+  }, []);
+
+  const handleFilterClick = (filterKey: string, filterValue: string) => {
+    let newUrl = "";
+    const currentSearchParams = searchParams.toString();
+
+    const existingFilters = qs.parse(currentSearchParams);
+
+    const newFilters = filterValue
+      ? { ...existingFilters, [filterKey]: filterValue }
+      : existingFilters;
+
+    newUrl = formUrlQuery({
+      params: currentSearchParams,
+      // @ts-ignore
+      filters: newFilters,
+    });
+
+    router.replace(newUrl, { scroll: false });
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-6 w-full md:flex-nowrap">
-      {/* <Select>
+      <Select
+        onValueChange={(value: string) => handleFilterClick("city", value)}
+      >
         <SelectTrigger className="select-field w-[180px]">
           <SelectValue placeholder="Location" />
         </SelectTrigger>
         <SelectContent>
-          {uniqueCities.map((city: string, i) => (
+          {filters?.cities?.map((city: string, i) => (
             <SelectItem value={city} key={i}>
               {city}
             </SelectItem>
-          ))}
+          )) ?? []}
         </SelectContent>
       </Select>
 
-      <Select>
+      <Select
+        onValueChange={(value: string) => handleFilterClick("type", value)}
+      >
         <SelectTrigger className="select-field w-[180px]">
           <SelectValue placeholder="Job Type" />
         </SelectTrigger>
         <SelectContent>
-          {uniqueTypes.map((type: string, i) => (
+          {filters?.types?.map((type: string, i) => (
             <SelectItem value={type} key={i}>
               {type}
             </SelectItem>
@@ -59,12 +85,14 @@ const Filters = () => {
         </SelectContent>
       </Select>
 
-      <Select>
+      <Select
+        onValueChange={(value: string) => handleFilterClick("industry", value)}
+      >
         <SelectTrigger className="select-field w-[180px]">
           <SelectValue placeholder="Industry" />
         </SelectTrigger>
         <SelectContent>
-          {uniqueIndustry.map((industry: string, i) => (
+          {filters?.industry?.map((industry: string, i) => (
             <SelectItem value={industry} key={i}>
               {industry}
             </SelectItem>
@@ -72,18 +100,22 @@ const Filters = () => {
         </SelectContent>
       </Select>
 
-      <Select>
+      <Select
+        onValueChange={(value: string) =>
+          handleFilterClick("experience", value)
+        }
+      >
         <SelectTrigger className="select-field w-[180px]">
           <SelectValue placeholder="Experience" />
         </SelectTrigger>
         <SelectContent>
-          {uniqueExperience.map((experience: number, i) => (
+          {filters?.experience?.map((experience: number, i) => (
             <SelectItem value={experience.toString()} key={i}>
               {experience}
             </SelectItem>
           ))}
         </SelectContent>
-      </Select> */}
+      </Select>
     </div>
   );
 };

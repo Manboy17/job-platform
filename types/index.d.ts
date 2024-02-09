@@ -8,7 +8,7 @@ export type CreateUserParams = {
 
 export type GetJobsParams = {
   search: string;
-  filter: string;
+  filter: object;
 };
 
 export type UpdateUserParams = {

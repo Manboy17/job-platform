@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { CiSearch } from "react-icons/ci";
-import { formUrlQuery, removeUrlQuery } from "@/lib/utils";
+import { formSearchUrlQuery, removeUrlQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const Search = () => {
@@ -16,7 +16,7 @@ const Search = () => {
       let newUrl = "";
 
       if (value) {
-        newUrl = formUrlQuery({
+        newUrl = formSearchUrlQuery({
           params: searchParams.toString(),
           key: "search",
           value: value.toLowerCase(),
