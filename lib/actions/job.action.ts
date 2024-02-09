@@ -63,6 +63,18 @@ export async function getJobs(params: GetJobsParams) {
       ];
     }
 
+    if (filter) {
+      Object.entries(filter).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (key === "experience") {
+            query[key] = Number(value);
+          } else {
+            query[key] = { $regex: new RegExp(value, "i") };
+          }
+        }
+      });
+    }
+
     const jobs = await populateJob(Job.find(query));
 
     if (!jobs) {
@@ -70,6 +82,26 @@ export async function getJobs(params: GetJobsParams) {
     }
 
     return JSON.parse(JSON.stringify(jobs));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getFilters() {
+  try {
+    await connectToDatabase();
+
+    const cities = await Job.find().distinct("city");
+    const types = await Job.find().distinct("type");
+    const industry = await Job.find().distinct("industry");
+    const experience = await Job.find().distinct("experience");
+
+    return {
+      cities,
+      types,
+      industry,
+      experience,
+    };
   } catch (error) {
     console.log(error);
   }

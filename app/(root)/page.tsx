@@ -10,7 +10,18 @@ import React from "react";
 
 const MainPage = async ({ searchParams }: SearchParamsProps) => {
   const search = (searchParams?.search as string) || "";
-  const filter = (searchParams?.filter as string) || "";
+
+  let filter: Record<string, any> = {
+    city: (searchParams?.city as string) || "",
+    type: (searchParams?.type as string) || "",
+    industry: (searchParams?.industry as string) || "",
+  };
+
+  const experience = Number(searchParams?.experience as string);
+  if (!isNaN(experience)) {
+    filter.experience = experience;
+  }
+
   const jobs: IJob[] = await getJobs({ search, filter });
   const { userId } = auth();
 
@@ -38,20 +49,26 @@ const MainPage = async ({ searchParams }: SearchParamsProps) => {
 
       <section className="bg-gray-100">
         <div className="wrapper py-5">
-          <span className="text-xs text-gray-500">
-            {jobs.length} Job Posting Available
-          </span>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-3">
-            {jobs.map((job: IJob) => (
-              <JobCard
-                key={job._id}
-                job={job}
-                isMainPage
-                userId={JSON.stringify(mongoUser?._id)}
-                isSaved={mongoUser?.saved.includes(job._id)}
-              />
-            ))}
-          </div>
+          {jobs?.length > 0 ? (
+            <>
+              <span className="text-xs text-gray-500">
+                {jobs?.length} Job Posting Available
+              </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-3">
+                {jobs?.map((job: IJob) => (
+                  <JobCard
+                    key={job._id}
+                    job={job}
+                    isMainPage
+                    userId={JSON.stringify(mongoUser?._id)}
+                    isSaved={mongoUser?.saved.includes(job._id)}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <h1 className="text-md font-medium">No Jobs Available</h1>
+          )}
         </div>
       </section>
     </>

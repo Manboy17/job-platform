@@ -6,13 +6,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface FormUrlQueryProps {
+interface FormSearchUrlQueryProps {
   params: string;
   key: string;
   value: string | null;
 }
 
-export function formUrlQuery({ params, key, value }: FormUrlQueryProps) {
+export function formSearchUrlQuery({
+  params,
+  key,
+  value,
+}: FormSearchUrlQueryProps) {
   const currentUrl = qs.parse(params);
 
   currentUrl[key] = value;
@@ -21,6 +25,25 @@ export function formUrlQuery({ params, key, value }: FormUrlQueryProps) {
     {
       url: window.location.pathname,
       query: currentUrl,
+    },
+    { skipNull: true }
+  );
+}
+
+interface FormUrlQueryProps {
+  params: string;
+  filters: { [key: string]: string[] | null };
+}
+
+export function formUrlQuery({ params, filters }: FormUrlQueryProps) {
+  const currentUrl = qs.parse(params);
+
+  const updatedFilters = { ...currentUrl, ...filters };
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: updatedFilters,
     },
     { skipNull: true }
   );
