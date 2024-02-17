@@ -4,24 +4,26 @@ import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StartedKit from "@tiptap/starter-kit";
 import Toolbar from "./Toolbar";
-import Heading from "@tiptap/extension-heading";
+import OrderedList from "@tiptap/extension-ordered-list";
 
 interface TipTapProps {
   onChange: (richText: string) => void;
+  description: string;
 }
 
-const TipTap = ({ onChange }: TipTapProps) => {
+const TipTap = ({ onChange, description }: TipTapProps) => {
   const editor = useEditor({
     extensions: [
       StartedKit.configure({}),
-      Heading.configure({
+      OrderedList.configure({
         HTMLAttributes: {
-          class: "text-2xl font-bold",
-          levles: [2],
+          itemTypeName: "listItem",
+          keepMarks: true,
+          keepAttributes: true,
         },
       }),
     ],
-    content: "",
+    content: description,
     editorProps: {
       attributes: {
         class:

@@ -1,9 +1,9 @@
-"use client";
-
 import { IJob } from "@/lib/database/models/job.model";
 import Link from "next/link";
 import React from "react";
 import Save from "./Save";
+import { MdEdit } from "react-icons/md";
+import DeleteJob from "./DeleteJob";
 
 interface JobCardProps {
   job: IJob;
@@ -13,6 +13,8 @@ interface JobCardProps {
 }
 
 const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
+  const isCreator = userId && userId == job.creator._id.toString();
+  console.log(userId, job.creator._id.toString(), isCreator);
   return (
     <div
       className={`py-5 px-7 ${
@@ -32,13 +34,23 @@ const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
       </div>
 
       <div className="border-b-[3px] border-dotted my-3" />
-      <div className="flex items-center gap-2">
-        <span className="bg-gray-200 rounded-md text-xs py-1 px-2 font-semibold">
-          {job.city}
-        </span>
-        <span className="bg-gray-200 rounded-md text-xs py-1 px-2 font-semibold">
-          {job.type}
-        </span>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="bg-gray-200 rounded-md text-xs py-1 px-2 font-semibold">
+            {job.city}
+          </span>
+          <span className="bg-gray-200 rounded-md text-xs py-1 px-2 font-semibold">
+            {job.type}
+          </span>
+        </div>
+        {isCreator && (
+          <div className="flex items-center gap-2">
+            <Link href={`/job/edit/${job._id}`}>
+              <MdEdit size={20} />
+            </Link>
+            <DeleteJob jobId={job._id} />
+          </div>
+        )}
       </div>
     </div>
   );

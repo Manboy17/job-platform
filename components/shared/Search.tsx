@@ -7,8 +7,8 @@ import { formSearchUrlQuery, removeUrlQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const Search = () => {
-  const [value, setValue] = useState("");
   const searchParams = useSearchParams();
+  const [value, setValue] = useState(searchParams.get("search") ?? "");
   const router = useRouter();
 
   useEffect(() => {

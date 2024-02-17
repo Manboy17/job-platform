@@ -15,24 +15,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { createJob } from "@/lib/actions/job.action";
+import { createJob, editJob } from "@/lib/actions/job.action";
 import { usePathname, useRouter } from "next/navigation";
 import { jobDefaultValues } from "@/constants";
 import TipTap from "./TipTap";
+import { IJob } from "@/lib/database/models/job.model";
 
 interface JobFormProps {
   type: "Create" | "Edit";
   userId: string;
+  jobDetails?: any;
 }
 
-const JobForm = ({ type, userId }: JobFormProps) => {
+const JobForm = ({ type, userId, jobDetails }: JobFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
+  const initialValues =
+    jobDetails && type === "Edit" ? jobDetails : jobDefaultValues;
+
   const form = useForm<z.infer<typeof JobSchema>>({
     resolver: zodResolver(JobSchema),
-    defaultValues: jobDefaultValues,
+    defaultValues: initialValues,
   });
 
   async function onSubmit(values: z.infer<typeof JobSchema>) {
@@ -40,17 +45,34 @@ const JobForm = ({ type, userId }: JobFormProps) => {
 
     try {
       if (type === "Create") {
-        const newJob = await createJob({
-          userId: JSON.parse(userId),
+        try {
+          const newJob: IJob = await createJob({
+            userId: JSON.parse(userId),
+            job: { ...values },
+            path: pathname,
+          });
+          if (newJob) {
+            form.reset();
+            router.push("/");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else if (type === "Edit") {
+        const editedJob = await editJob({
+          jobId: jobDetails._id,
           job: { ...values },
           path: pathname,
         });
-        if (newJob) {
+
+        if (editedJob) {
           form.reset();
-          router.push("/");
+          router.push(`/job/${jobDetails._id}`);
         }
-      } else if (type === "Edit") {
-        // logic here
+        try {
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -158,7 +180,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
             name="experience"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Enter the experience</FormLabel>
+                <FormLabel>Enter the minimal experience in years</FormLabel>
                 <FormControl>
                   <Input
                     className="input-field"
@@ -198,7 +220,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
             <FormItem className="w-full">
               <FormLabel>Enter the description</FormLabel>
               <FormControl>
-                <TipTap onChange={field.onChange} />
+                <TipTap onChange={field.onChange} description={field.value} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -206,7 +228,7 @@ const JobForm = ({ type, userId }: JobFormProps) => {
         />
 
         <Button className="mt-5 bg-blue-700" variant="default">
-          {isLoading ? "Loading" : "Create"}
+          {isLoading ? "Loading" : type === "Create" ? "Create" : "Edit"}
         </Button>
       </form>
     </Form>

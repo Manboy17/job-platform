@@ -3,14 +3,7 @@
 import React from "react";
 
 import { type Editor } from "@tiptap/core";
-import {
-  Bold,
-  Strikethrough,
-  Italic,
-  List,
-  ListOrdered,
-  Heading2,
-} from "lucide-react";
+import { Bold, Strikethrough, Italic, Heading2 } from "lucide-react";
 import { Toggle } from "../ui/toggle";
 
 interface ToolbarProps {
@@ -52,20 +45,6 @@ const Toolbar = ({ editor }: ToolbarProps) => {
         onPressedChange={() => editor.chain().focus().toggleStrike().run()}
       >
         <Strikethrough className="h-4 w-4" />
-      </Toggle>
-      <Toggle
-        size="sm"
-        pressed={editor.isActive("bulletlist")}
-        onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
-      >
-        <List className="h-4 w-4" />
-      </Toggle>
-      <Toggle
-        size="sm"
-        pressed={editor.isActive("orderedlist")}
-        onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
-      >
-        <ListOrdered className="h-4 w-4" />
       </Toggle>
     </div>
   );
