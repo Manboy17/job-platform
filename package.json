@@ -17,6 +17,8 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toggle": "^1.0.3",
+    "@tiptap/extension-list-item": "^2.2.3",
+    "@tiptap/extension-ordered-list": "^2.2.3",
     "@tiptap/pm": "^2.2.1",
     "@tiptap/react": "^2.2.1",
     "@tiptap/starter-kit": "^2.2.1",

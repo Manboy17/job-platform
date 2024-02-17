@@ -28,5 +28,7 @@ export const JobSchema = z.object({
     .string()
     .min(3, "Company must be at least 3 characters long")
     .max(25, "Company must be at most 25 characters long"),
-  experience: z.number().min(0, "Experience must be a non-negative number"),
+  experience: z.coerce
+    .number()
+    .min(0, "Experience must be a non-negative number"),
 });

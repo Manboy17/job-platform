@@ -60,7 +60,7 @@ const MainPage = async ({ searchParams }: SearchParamsProps) => {
                     key={job._id}
                     job={job}
                     isMainPage
-                    userId={JSON.stringify(mongoUser?._id)}
+                    userId={mongoUser?._id.toString()}
                     isSaved={mongoUser?.saved.includes(job._id)}
                   />
                 ))}

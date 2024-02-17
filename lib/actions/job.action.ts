@@ -2,6 +2,8 @@
 
 import {
   CreateJobParams,
+  DeleteJobParams,
+  EditJobParams,
   GetJobByIdParams,
   GetJobsParams,
   GetSavedJobsParams,
@@ -67,7 +69,7 @@ export async function getJobs(params: GetJobsParams) {
       Object.entries(filter).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           if (key === "experience") {
-            query[key] = Number(value);
+            query[key] = { $lte: Number(value) };
           } else {
             query[key] = { $regex: new RegExp(value, "i") };
           }
@@ -91,10 +93,12 @@ export async function getFilters() {
   try {
     await connectToDatabase();
 
-    const cities = await Job.find().distinct("city");
-    const types = await Job.find().distinct("type");
-    const industry = await Job.find().distinct("industry");
-    const experience = await Job.find().distinct("experience");
+    const [cities, types, industry, experience] = await Promise.all([
+      Job.find().distinct("city"),
+      Job.find().distinct("type"),
+      Job.find().distinct("industry"),
+      Job.find().distinct("experience"),
+    ]);
 
     return {
       cities,
@@ -142,6 +146,50 @@ export async function getJobById(params: GetJobByIdParams) {
     }
 
     return JSON.parse(JSON.stringify(job));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteJob(params: DeleteJobParams) {
+  try {
+    await connectToDatabase();
+
+    const { jobId, path } = params;
+
+    const job = await Job.findByIdAndDelete(jobId);
+
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function editJob(params: EditJobParams) {
+  try {
+    await connectToDatabase();
+
+    const { job, path, jobId } = params;
+
+    const editJob = await Job.findById(jobId);
+
+    if (!editJob) {
+      throw new Error("Job not found");
+    }
+
+    const editedJob = await Job.findByIdAndUpdate(
+      jobId,
+      { ...job },
+      { new: true }
+    );
+
+    revalidatePath(path);
+
+    return JSON.parse(JSON.stringify(editedJob));
   } catch (error) {
     console.log(error);
   }

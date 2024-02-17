@@ -56,6 +56,7 @@ const Filters = () => {
   return (
     <div className="flex flex-wrap items-center gap-6 w-full md:flex-nowrap">
       <Select
+        value={searchParams.get("city") ?? ""}
         onValueChange={(value: string) => handleFilterClick("city", value)}
       >
         <SelectTrigger className="select-field w-[180px]">
@@ -71,6 +72,7 @@ const Filters = () => {
       </Select>
 
       <Select
+        value={searchParams.get("type") ?? ""}
         onValueChange={(value: string) => handleFilterClick("type", value)}
       >
         <SelectTrigger className="select-field w-[180px]">
@@ -86,6 +88,7 @@ const Filters = () => {
       </Select>
 
       <Select
+        value={searchParams.get("industry") ?? ""}
         onValueChange={(value: string) => handleFilterClick("industry", value)}
       >
         <SelectTrigger className="select-field w-[180px]">
@@ -101,6 +104,7 @@ const Filters = () => {
       </Select>
 
       <Select
+        value={searchParams.get("experience") ?? ""}
         onValueChange={(value: string) =>
           handleFilterClick("experience", value)
         }
@@ -111,7 +115,7 @@ const Filters = () => {
         <SelectContent>
           {filters?.experience?.map((experience: number, i) => (
             <SelectItem value={experience.toString()} key={i}>
-              {experience}
+              {experience.toString()} years or less
             </SelectItem>
           ))}
         </SelectContent>

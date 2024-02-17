@@ -1,3 +1,5 @@
+import { IJob } from "@/lib/database/models/job.model";
+
 export type CreateUserParams = {
   clerkId: string;
   email: string;
@@ -58,6 +60,30 @@ export type GetJobByIdParams = {
   jobId: string;
 };
 
+export interface DeleteJobParams {
+  jobId: string;
+  path: string;
+}
+
 export interface SearchParamsProps {
   searchParams: { [key: string]: string | undefined };
+}
+
+export interface EditJobParams {
+  job: {
+    position: string;
+    shortDesc: string;
+    description: string;
+    city: string;
+    type: string;
+    industry: string;
+    experience: number;
+    company: string;
+  };
+  jobId: string;
+  path: string;
+}
+
+export interface ParamsProps {
+  params: { id: string };
 }
