@@ -31,7 +31,7 @@ const JobDetails = async ({ params: { id } }: { params: { id: string } }) => {
             </button>
             <Save
               isSaved={mongoUser?.saved.includes(job._id)}
-              userId={JSON.stringify(mongoUser?._id)}
+              userId={mongoUser?._id}
               jobId={job._id}
             />
           </div>
