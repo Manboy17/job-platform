@@ -8,31 +8,34 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const Search = () => {
   const searchParams = useSearchParams();
-  const [value, setValue] = useState(searchParams.get("search") ?? "");
+  const query = searchParams.get("search");
+  const [search, setSearch] = useState(query || "");
   const router = useRouter();
 
   useEffect(() => {
-    const debouncedFn = setTimeout(() => {
-      let newUrl = "";
-
-      if (value) {
-        newUrl = formSearchUrlQuery({
+    const delayDebounceFn = setTimeout(() => {
+      if (search) {
+        const newUrl = formSearchUrlQuery({
           params: searchParams.toString(),
           key: "search",
-          value: value.toLowerCase(),
+          value: search.toLowerCase(),
         });
+
+        router.replace(newUrl, { scroll: false });
       } else {
-        newUrl = removeUrlQuery({
-          params: searchParams.toString(),
-          keysToRemove: ["search"],
-        });
+        if (query) {
+          const newUrl = removeUrlQuery({
+            params: searchParams.toString(),
+            keysToRemove: ["search"],
+          });
+          router.replace(newUrl, { scroll: false });
+        }
+        setSearch("");
       }
 
-      router.replace(newUrl, { scroll: false });
+      return () => clearTimeout(delayDebounceFn);
     }, 300);
-
-    return () => clearTimeout(debouncedFn);
-  }, [value, searchParams, router]);
+  }, [search, router, searchParams, query]);
 
   return (
     <div className="flex min-h-[40px] min-w-[180px] items-center w-full overflow-hidden rounded-md px-2 border-2 border-grey-50">
@@ -40,8 +43,8 @@ const Search = () => {
       <Input
         className="border-none outline-none placeholder:text-gray-400 focus-visible:ring-offset-0 focus-visible:ring-transparent"
         placeholder="Search jobs..."
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
+        onChange={(e) => setSearch(e.target.value)}
+        value={search}
       />
     </div>
   );

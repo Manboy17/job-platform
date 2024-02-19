@@ -13,8 +13,7 @@ interface JobCardProps {
 }
 
 const JobCard = ({ job, isMainPage, userId, isSaved }: JobCardProps) => {
-  const isCreator = userId && userId == job.creator._id.toString();
-  console.log(userId, job.creator._id.toString(), isCreator);
+  const isCreator = userId && userId == job.creator._id;
   return (
     <div
       className={`py-5 px-7 ${

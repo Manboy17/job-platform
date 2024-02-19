@@ -25,7 +25,7 @@ const ProfilePage = async () => {
                   key={job._id}
                   job={job}
                   isMainPage={false}
-                  userId={JSON.stringify(user?._id)}
+                  userId={user?._id}
                   isSaved={user?.saved.includes(job._id)}
                 />
               ))}
@@ -49,7 +49,7 @@ const ProfilePage = async () => {
                   key={job._id}
                   job={job}
                   isMainPage={false}
-                  userId={JSON.stringify(user?._id)}
+                  userId={user?._id}
                   isSaved={user?.saved.includes(job._id)}
                 />
               ))}
