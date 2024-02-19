@@ -15,7 +15,7 @@ const Save = ({ isSaved, userId, jobId }: SaveProps) => {
   const pathname = usePathname();
   const handleSave = async () => {
     await toggleSavedJobs({
-      userId: JSON.parse(userId!),
+      userId: userId!,
       jobId,
       path: pathname,
     });
