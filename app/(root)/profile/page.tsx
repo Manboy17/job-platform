@@ -39,7 +39,7 @@ const ProfilePage = async () => {
           />
         )}
       </div>
-      <div className="w-1/2 p-5">
+      <div className="md:w-1/2 p-5">
         {savedJobs.length ? (
           <>
             <h1 className="text-lg font-medium">Your saved jobs</h1>
